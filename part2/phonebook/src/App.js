@@ -21,7 +21,6 @@ const App = () => {
       })
   }, [])
 
-  
   const deleteEntry = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
       entryService
@@ -58,7 +57,13 @@ const App = () => {
           setTimeout( () => {
             setNotification(null)
           }, 5000)
-        }) 
+        })
+        .catch( error => {
+          setError(`${error.response.data.error}`)
+          setTimeout( () => {
+            setError(null)
+          }, 5000)
+        })
     }
     else if (window.confirm(`${newName} is already added to the Phonebook. Replace the old number with a new one?`)) {
       const nameObject = {
@@ -71,10 +76,8 @@ const App = () => {
       entryService
         .update(id, nameObject)
         .then(response => {
-          console.log(response)
           setPersons( persons.filter( a => a.id !== id).concat(response))
         })
-      console.log("Already exists!")
     }
   }
 
